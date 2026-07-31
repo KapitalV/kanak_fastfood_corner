@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Kanak FoodCoat | Order Fresh Indian Food Online</title>
+  <meta name="description" content="Browse our full menu of fresh Indian food — Biryani, Paneer, Momos, Dosa, and more. Order now and get it delivered in 40 minutes within 20 km." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       DESIGN TOKENS
+    ============================================= */
+    :root {
+      --orange:       #FC8019;
+      --orange-dark:  #E8720A;
+      --orange-light: #FFF3E6;
+      --green:        #16A34A;
+      --green-light:  #DCFCE7;
+      --warning:      #F59E0B;
+      --bg:           #FFFFFF;
+      --surface:      #F8FAFC;
+      --text-1:       #111827;
+      --text-2:       #6B7280;
+      --text-3:       #9CA3AF;
+      --border:       #E5E7EB;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,0.06);
+      --shadow-md:    0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg:    0 8px 32px rgba(0,0,0,0.13);
+      --tr:           all 0.2s ease;
+      --r-sm:  8px;
+      --r-md:  16px;
+      --r-lg:  24px;
+      --r-xl:  32px;
+      --r-full:9999px;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a  { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+    img { max-width: 100%; height: auto; }
+
+    /* =============================================
+       UTILITIES
+    ============================================= */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -0.4px;
+    }
+    .section-link {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--tr);
+    }
+    .section-link:hover { color: var(--orange-dark); gap: 8px; }
+
+    /* =============================================
+       BRAND WORDMARK (shared)
+    ============================================= */
+    .brand {
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .brand-icon { width: 38px; height: 38px; flex-shrink: 0; }
+    .brand-text { font-size: 21px; letter-spacing: -0.3px; line-height: 1; }
+    .brand-kanak    { font-weight: 800; color: #FC8019; }
+    .brand-foodcoat { font-weight: 400; color: #16A34A; }
+
+    /* =============================================
+       NAVBAR
+    ============================================= */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--bg);
+      height: 66px;
+      display: flex; align-items: center;
+      transition: box-shadow 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .navbar.scrolled {
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-bottom-color: var(--border);
+    }
+    .navbar-inner {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      width: 100%; gap: 20px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a {
+      font-size: 15px; font-weight: 500; color: #374151;
+      transition: var(--tr); position: relative; padding-bottom: 3px;
+      white-space: nowrap;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+    .nav-links a.active::after {
+      content: ''; position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px; background: var(--orange); border-radius: 2px;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+    /* Cart icon */
+    .cart-btn {
+      position: relative;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--r-full);
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--tr); color: var(--text-1);
+    }
+    .cart-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--orange); color: white;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.5);
+      transition: var(--tr);
+      border: 2px solid white;
+    }
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      background: var(--orange); color: white;
+      font-size: 15px; font-weight: 600;
+      padding: 10px 22px; border-radius: var(--r-full);
+      transition: var(--tr); white-space: nowrap;
+    }
+    .nav-cta:hover {
+      background: var(--orange-dark); transform: scale(1.03);
+      box-shadow: 0 4px 14px rgba(252,128,25,0.38);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; padding: 6px; border-radius: var(--r-sm);
+    }
+    .hamburger span {
+      display: block; width: 23px; height: 2px;
+      background: var(--text-1); border-radius: 2px; transition: var(--tr);
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-8px); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      display: none; position: fixed;
+      top: 66px; left: 0; right: 0;
+      background: white; z-index: 998;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+      padding: 8px 28px 24px;
+      border-top: 1px solid var(--border);
+      animation: slideDown 0.2s ease;
+    }
+    .mobile-drawer.open { display: block; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-drawer ul li a {
+      display: flex; align-items: center;
+      padding: 15px 0; font-size: 16px; font-weight: 500;
+      color: #374151; border-bottom: 1px solid var(--border);
+      transition: var(--tr);
+    }
+    .mobile-drawer ul li a:hover { color: var(--orange); padding-left: 6px; }
+    .mobile-drawer ul li:last-child a { border-bottom: none; }
+    .mobile-cta-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; margin-top: 16px;
+      background: var(--orange); color: white;
+      font-weight: 600; font-size: 16px;
+      padding: 14px; border-radius: var(--r-full); transition: var(--tr);
+    }
+    .mobile-cta-btn:hover { background: var(--orange-dark); }
+
+    /* =============================================
+       TOAST NOTIFICATION
+    ============================================= */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--text-1); color: white;
+      padding: 12px 24px; border-radius: var(--r-full);
+      font-size: 14px; font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0; white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* =============================================
+       PAGE WRAPPER (offset sticky nav)
+    ============================================= */
+    .page-content { padding-top: 66px; }
+
+    /* =============================================
+       BREADCRUMB / BACK BAR
+    ============================================= */
+    .back-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 14px; font-weight: 500; color: var(--text-2);
+      transition: var(--tr);
+    }
+    .back-link:hover { color: var(--orange); }
+    .back-link svg { transition: var(--tr); }
+    .back-link:hover svg { transform: translateX(-3px); }
+
+    /* =============================================
+       SECTION SPACING
+    ============================================= */
+    .section { padding: 56px 0; }
+    .section-alt { background: var(--surface); }
+
+    /* =============================================
+       2.1 FEATURE CATEGORIES
+    ============================================= */
+    .categories-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .categories-row::-webkit-scrollbar { display: none; }
+    .cat-item {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      flex-shrink: 0; cursor: pointer;
+      transition: var(--tr);
+    }
+    .cat-icon {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: #F3F4F6;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      border: 2px solid transparent;
+      transition: var(--tr);
+      box-shadow: var(--shadow-sm);
+    }
+    .cat-item:hover .cat-icon,
+    .cat-item.active .cat-icon {
+      background: #FEF3C7;
+      border-color: var(--orange);
+    }
+    .cat-label {
+      font-size: 12px; font-weight: 600;
+      color: #374151; text-align: center;
+      white-space: nowrap; transition: var(--tr);
+    }
+    .cat-item:hover .cat-label,
+    .cat-item.active .cat-label { color: var(--orange); }
+
+    /* =============================================
+       2.2 PROMO BANNERS
+    ============================================= */
+    .promo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .promo-card {
+      border-radius: 20px;
+      padding: 26px 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 185px;
+      cursor: pointer;
+      transition: var(--tr);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .promo-card:hover { transform: scale(1.02); box-shadow: var(--shadow-lg); }
+    .pc-yellow { background: #CA8A04; background: linear-gradient(135deg, #EAB308 0%, #CA8A04 100%); }
+    .pc-teal   { background: #0E7490; background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%); }
+    .pc-orange { background: #C2410C; background: linear-gradient(135deg, #F97316 0%, #C2410C 100%); }
+    .promo-tag {
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,0.22);
+      color: white; font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: var(--r-full);
+      letter-spacing: 0.5px; text-transform: uppercase;
+      width: fit-content; margin-bottom: 8px;
+      backdrop-filter: blur(4px);
+    }
+    .promo-title {
+      font-size: 18px; font-weight: 800; color: white;
+      line-height: 1.25; letter-spacing: -0.3px;
+      max-width: 170px;
+    }
+    .promo-cta {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 13px; font-weight: 700; color: white;
+      margin-top: 10px; transition: var(--tr);
+    }
+    .promo-cta:hover { gap: 10px; }
+    .promo-price {
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      margin-top: 4px;
+    }
+    .promo-food-art {
+      position: absolute;
+      bottom: -8px; right: -8px;
+      font-size: 80px; line-height: 1;
+      opacity: 0.85;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.22));
+      pointer-events: none;
+      transition: var(--tr);
+    }
+    .promo-card:hover .promo-food-art { transform: scale(1.08) rotate(-5deg); }
+    .promo-left { z-index: 1; }
+
+    /* =============================================
+       2.3 FOOD GRID — TODAY'S BEST DISHES
+    ============================================= */
+    /* Filter Tab Bar */
+    .tab-bar {
+      display: flex; gap: 8px;
+      overflow-x: auto; padding-bottom: 4px;
+      margin-bottom: 28px;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-pill {
+      flex-shrink: 0;
+      padding: 8px 18px;
+      border-radius: var(--r-full);
+      font-size: 14px; font-weight: 600;
+      color: #374151; background: transparent;
+      border: 1.5px solid var(--border);
+      cursor: pointer; transition: var(--tr);
+      white-space: nowrap;
+    }
+    .tab-pill:hover { color: var(--orange); border-color: var(--orange); }
+    .tab-pill.active {
+      background: var(--orange); color: white;
+      border-color: var(--orange);
+    }
+
+    /* Food Grid */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .food-card {
+      background: white;
+      border-radius: var(--r-md);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+      transition: var(--tr);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+    }
+    .food-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+    }
+    .food-card-img {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .food-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+      transition: var(--tr);
+    }
+    .food-card:hover .food-img-placeholder { transform: scale(1.06); }
+    /* unique card gradient colors */
+    .gi-1  { background: linear-gradient(135deg, #FFF3E6, #FFEDD5); }
+    .gi-2  { background: linear-gradient(135deg, #DCFCE7, #BBF7D0); }
+    .gi-3  { background: linear-gradient(135deg, #FEF9C3, #FEF08A); }
+    .gi-4  { background: linear-gradient(135deg, #CFFAFE, #A5F3FC); }
+    .gi-5  { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+    .gi-6  { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+    .gi-7  { background: linear-gradient(135deg, #FEF3C7, #FDE68A); }
+    .gi-8  { background: linear-gradient(135deg, #E0F2FE, #BAE6FD); }
+
+    .off-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--orange); color: white;
+      font-size: 10px; font-weight: 800;
+      padding: 3px 8px; border-radius: 6px;
+      letter-spacing: 0.4px;
+    }
+    .wishlist-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255,255,255,0.9); border: none;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--tr);
+      box-shadow: var(--shadow-sm);
+      font-size: 16px; color: #9CA3AF;
+    }
+    .wishlist-btn:hover { color: #EF4444; transform: scale(1.1); background: white; }
+    .wishlist-btn.liked { color: #EF4444; }
+
+    .food-card-body {
+      padding: 12px 14px 14px;
+      display: flex; flex-direction: column; gap: 5px;
+      flex: 1;
+    }
+    .food-meta {
+      display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    .veg-tag {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500; color: var(--text-2);
+    }
+    .veg-dot {
+      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    }
+    .dot-veg   { background: #16A34A; }
+    .dot-nonveg{ background: #EF4444; }
+    .star-row {
+      display: flex; align-items: center; gap: 3px;
+      font-size: 12px; color: var(--warning); font-weight: 600;
+    }
+    .food-name {
+      font-size: 14px; font-weight: 700;
+      color: var(--text-1); line-height: 1.3;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .price-row {
+      display: flex; align-items: center; gap: 7px; margin-top: 2px;
+    }
+    .price-old {
+      font-size: 12px; color: var(--text-3);
+      text-decoration: line-through; font-weight: 500;
+    }
+    .price-new {
+      font-size: 16px; font-weight: 800; color: var(--text-1);
+    }
+    .add-cart-btn {
+      margin-top: 8px;
+      width: 100%;
+      padding: 9px;
+      border-radius: var(--r-full);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 700;
+      background: white;
+      color: var(--orange);
+      border: 1.5px solid var(--orange);
+      cursor: pointer; transition: var(--tr);
+      min-height: 40px;
+    }
+    .add-cart-btn:hover {
+      background: var(--orange); color: white;
+      transform: scale(1.02);
+    }
+    .add-cart-btn.added {
+      background: var(--orange); color: white;
+    }
+
+    /* =============================================
+       2.4 CUSTOMER REVIEWS
+    ============================================= */
+    .reviews-meta {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+    }
+    .stars-display { display: flex; gap: 3px; font-size: 18px; }
+    .reviews-count { font-size: 14px; color: var(--text-2); font-weight: 500; }
+    .reviews-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .review-card {
+      background: white;
+      border-radius: var(--r-md);
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 12px;
+      transition: var(--tr);
+    }
+    .review-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .review-title {
+      font-size: 14px; font-weight: 700; color: var(--text-1); line-height: 1.3;
+    }
+    .review-text {
+      font-size: 13px; font-style: italic;
+      color: var(--text-2); line-height: 1.65; flex: 1;
+    }
+    .review-footer { display: flex; flex-direction: column; gap: 5px; }
+    .review-stars { display: flex; gap: 2px; font-size: 14px; }
+    .review-name { font-size: 13px; font-weight: 600; color: #374151; }
+
+    /* =============================================
+       2.5 DUAL PROMO BANNERS
+    ============================================= */
+    .dual-promo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .dual-banner {
+      border-radius: 20px;
+      padding: 34px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+      cursor: pointer;
+      transition: var(--tr);
+    }
+    .dual-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .db-mint   { background: #6EE7B7; }
+    .db-yellow { background: #FDE68A; }
+    .db-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(0,0,0,0.1);
+      padding: 6px 14px; border-radius: var(--r-full);
+      font-size: 13px; font-weight: 700; color: var(--text-1);
+      width: fit-content;
+      backdrop-filter: blur(4px);
+    }
+    .dual-banner h3 {
+      font-size: 24px; font-weight: 800; color: var(--text-1);
+      line-height: 1.2; letter-spacing: -0.5px; max-width: 240px;
+    }
+    .dual-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; color: var(--text-1);
+      font-size: 14px; font-weight: 700;
+      padding: 11px 22px; border-radius: var(--r-full);
+      border: 1.5px solid rgba(0,0,0,0.15);
+      width: fit-content; transition: var(--tr);
+    }
+    .dual-cta:hover { background: var(--text-1); color: white; gap: 12px; }
+    .banner-art {
+      position: absolute;
+      bottom: 0; right: 0;
+      font-size: 100px; line-height: 1;
+      opacity: 0.75;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15));
+      pointer-events: none;
+      transition: var(--tr);
+    }
+    .dual-banner:hover .banner-art { transform: scale(1.06) rotate(-3deg); }
+
+    /* =============================================
+       2.6 SUPPORT BAR
+    ============================================= */
+    .support-bar {
+      background: var(--orange);
+      padding: 22px 0;
+    }
+    .support-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .support-text h4 {
+      font-size: 18px; font-weight: 700; color: white;
+      letter-spacing: -0.2px;
+    }
+    .support-text p { font-size: 14px; color: rgba(255,255,255,0.8); margin-top: 3px; }
+    .support-phone-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: white; color: var(--orange);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 700;
+      padding: 12px 26px; border-radius: var(--r-full);
+      border: none; cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: var(--tr);
+      flex-shrink: 0;
+    }
+    .support-phone-btn:hover { background: var(--text-1); color: white; transform: scale(1.02); }
+
+    /* =============================================
+       2.7 FOOTER
+    ============================================= */
+    .footer {
+      background: #111111;
+      padding: 56px 0 0;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 60px;
+      padding-bottom: 40px;
+    }
+
+    /* Footer brand */
+    .footer-brand-kanak    { font-weight: 800; color: #FC8019; font-size: 22px; }
+    .footer-brand-foodcoat { font-weight: 400; color: white;   font-size: 22px; }
+    .footer-tagline {
+      font-size: 15px; color: #9CA3AF;
+      margin: 10px 0 24px; line-height: 1.5;
+      font-style: italic;
+    }
+    .footer-app-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .footer-app-btn {
+      display: flex; align-items: center; gap: 9px;
+      background: #1F2937;
+      border: 1.5px solid #374151;
+      color: white; border-radius: 10px;
+      padding: 10px 14px;
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      cursor: pointer; transition: var(--tr);
+    }
+    .footer-app-btn:hover { background: #374151; border-color: #6B7280; transform: translateY(-2px); }
+    .footer-app-btn .fai { font-size: 18px; }
+    .footer-app-btn .fat-wrap { display: flex; flex-direction: column; }
+    .footer-app-btn .fat-small { font-size: 9px; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.5px; }
+    .footer-app-btn .fat-name  { font-size: 13px; font-weight: 700; }
+
+    /* Footer links */
+    .footer-links-col h4 {
+      font-size: 13px; font-weight: 700;
+      color: #6B7280; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 18px;
+    }
+    .footer-links-col ul { display: flex; flex-direction: column; gap: 4px; }
+    .footer-links-col ul li a {
+      font-size: 14px; color: #D1D5DB; line-height: 2.2;
+      transition: var(--tr);
+    }
+    .footer-links-col ul li a:hover { color: var(--orange); }
+
+    /* Footer bottom bar */
+    .footer-bottom {
+      border-top: 1px solid #374151;
+      padding: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-social { display: flex; gap: 14px; align-items: center; }
+    .social-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #1F2937; border: 1.5px solid #374151;
+      display: flex; align-items: center; justify-content: center;
+      color: #D1D5DB; font-size: 16px; transition: var(--tr);
+      cursor: pointer;
+    }
+    .social-icon:hover { background: var(--orange); border-color: var(--orange); color: white; transform: scale(1.1); }
+    .footer-copy {
+      font-size: 13px; color: #9CA3AF;
+    }
+
+    /* =============================================
+       RESPONSIVE — TABLET (768–1023px)
+    ============================================= */
+    @media (max-width: 1023px) {
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 14px; }
+      .food-grid { grid-template-columns: repeat(2, 1fr); }
+      .reviews-row { grid-template-columns: repeat(2, 1fr); }
+      .promo-grid { grid-template-columns: 1fr 1fr; }
+      .promo-grid .promo-card:last-child { grid-column: 1 / -1; }
+    }
+
+    /* =============================================
+       RESPONSIVE — MOBILE (<768px)
+    ============================================= */
+    @media (max-width: 767px) {
+      .container {
+        max-width: 100%;
+        padding: 0 20px;
+      }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-right { gap: 8px; }
+      .cart-btn {
+        width: 40px;
+        height: 40px;
+      }
+      .section { padding: 40px 0; }
+
+      .section-title  { font-size: 20px; }
+      .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .cat-icon { width: 62px; height: 62px; font-size: 26px; }
+      .cat-label { font-size: 11px; }
+
+      .promo-grid { grid-template-columns: 1fr; }
+      .promo-card { min-height: 160px; }
+      .promo-title { font-size: 16px; max-width: 160px; }
+      .promo-food-art { font-size: 60px; }
+
+      .food-grid { grid-template-columns: 1fr; gap: 14px; }
+      .food-img-placeholder { font-size: 48px; }
+
+      .reviews-row {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+      .reviews-row::-webkit-scrollbar { display: none; }
+      .review-card {
+        min-width: min(86vw, 340px);
+        scroll-snap-align: start;
+      }
+
+      .dual-promo-grid { grid-template-columns: 1fr; }
+      .dual-banner { padding: 26px 24px; min-height: 180px; }
+      .dual-banner h3 { font-size: 20px; }
+      .banner-art { font-size: 76px; }
+
+      .support-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    /* =============================================
+       FOCUS / ACCESSIBILITY
+    ============================================= */
+    :focus-visible { outline: 2.5px solid var(--orange); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       TOAST NOTIFICATION
+  ============================================= -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <!-- =============================================
+       STICKY NAVBAR
+  ============================================= -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="navbar-inner">
+
+        <!-- Brand -->
+        <a href="index.html" class="brand" aria-label="Kanak FoodCoat — Go to homepage">
+          <svg class="brand-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="42" height="42" rx="10" fill="#FC8019"/>
+            <rect x="8"  y="17" width="26" height="3.5" rx="1.75" fill="white"/>
+            <rect x="6"  y="22" width="30" height="2.5" rx="1.25" fill="white" opacity="0.85"/>
+            <rect x="10" y="13" width="22" height="5"   rx="2.5"  fill="white" opacity="0.9"/>
+            <rect x="8"  y="25" width="26" height="9"   rx="4"    fill="white"/>
+            <circle cx="14" cy="29.5" r="2" fill="#FC8019"/>
+            <circle cx="28" cy="29.5" r="2" fill="#FC8019"/>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-kanak">Kanak</span><span class="brand-foodcoat">FoodCoat</span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <ul class="nav-links" role="list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html" class="active" aria-current="page">Offers</a></li>
+          <li><a href="menu.html">Restaurants</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">Riders</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+
+        <!-- Right -->
+        <div class="nav-right">
+          <button class="cart-btn" id="cart-btn" aria-label="View cart (0 items)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span class="cart-badge" id="cart-badge" aria-hidden="true">0</span>
+          </button>
+          <a href="menu.html" class="nav-cta">Order Now</a>
+          <button class="hamburger" id="hamburger-btn"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-drawer">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Offers</a></li>
+      <li><a href="menu.html">Restaurants</a></li>
+      <li><a href="#">Partners</a></li>
+      <li><a href="#">Riders</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <a href="menu.html" class="mobile-cta-btn">Order Now</a>
+  </div>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-content" id="main-content">
+
+    <!-- Back Bar -->
+    <div class="back-bar" aria-label="Breadcrumb navigation">
+      <div class="container">
+        <a href="index.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          Back to Home
+        </a>
+      </div>
+    </div>
+
+    <!-- =============================================
+         2.1 FEATURE CATEGORIES
+    ============================================= -->
+    <section class="section section-alt" id="categories" aria-label="Feature food categories">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Feature Categories</h2>
+          <a href="#" class="section-link" aria-label="See all categories">See All →</a>
+        </div>
+        <div class="categories-row" role="list" aria-label="Food category selection">
+          <button class="cat-item active" data-cat="all" role="listitem" aria-pressed="true" aria-label="Set Menu — all items">
+            <div class="cat-icon" aria-hidden="true">🍱</div>
+            <span class="cat-label">Set Menu</span>
+          </button>
+          <button class="cat-item" data-cat="hot" role="listitem" aria-pressed="false" aria-label="Hot items">
+            <div class="cat-icon" aria-hidden="true">🌶️</div>
+            <span class="cat-label">Hot Item</span>
+          </button>
+          <button class="cat-item" data-cat="burger" role="listitem" aria-pressed="false" aria-label="Burgers">
+            <div class="cat-icon" aria-hidden="true">🍔</div>
+            <span class="cat-label">Burger</span>
+          </button>
+          <button class="cat-item" data-cat="biryani" role="listitem" aria-pressed="false" aria-label="Biryani">
+            <div class="cat-icon" aria-hidden="true">🍛</div>
+            <span class="cat-label">Biryani</span>
+          </button>
+          <button class="cat-item" data-cat="drinks" role="listitem" aria-pressed="false" aria-label="Drinks">
+            <div class="cat-icon" aria-hidden="true">🥤</div>
+            <span class="cat-label">Drinks</span>
+          </button>
+          <button class="cat-item" data-cat="pizza" role="listitem" aria-pressed="false" aria-label="Pizza">
+            <div class="cat-icon" aria-hidden="true">🍕</div>
+            <span class="cat-label">Pizza</span>
+          </button>
+          <button class="cat-item" data-cat="dessert" role="listitem" aria-pressed="false" aria-label="Desserts">
+            <div class="cat-icon" aria-hidden="true">🍮</div>
+            <span class="cat-label">Desserts</span>
+          </button>
+          <button class="cat-item" data-cat="chinese" role="listitem" aria-pressed="false" aria-label="Chinese food">
+            <div class="cat-icon" aria-hidden="true">🥟</div>
+            <span class="cat-label">Chinese</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         2.2 PROMOTIONAL BANNERS
+    ============================================= -->
+    <section class="section" id="promo-banners" aria-label="Promotional offers">
+      <div class="container">
+        <div class="promo-grid">
+
+          <!-- Card 1 — Golden Yellow -->
+          <article class="promo-card pc-yellow" role="article" tabindex="0" aria-label="Amazing deal: Buy 2 Biryani Get 1 free">
+            <div class="promo-left">
+              <span class="promo-tag">🔥 Limited Deal</span>
+              <h3 class="promo-title">Amazing Buy 2 Biryani Get 1 Free!</h3>
+              <p class="promo-price">Starting from ₹199</p>
+              <a href="#food-grid" class="promo-cta">Order Now →</a>
+            </div>
+            <span class="promo-food-art" aria-hidden="true">🍛</span>
+          </article>
+
+          <!-- Card 2 — Teal -->
+          <article class="promo-card pc-teal" role="article" tabindex="0" aria-label="Weekend special: Butter Paneer up to 50% off">
+            <div class="promo-left">
+              <span class="promo-tag">🎉 Weekend Special</span>
+              <h3 class="promo-title">Delicious Butter Paneer The Weekend</h3>
+              <p class="promo-price">Up to 50% off</p>
+              <a href="#food-grid" class="promo-cta">Order Now →</a>
+            </div>
+            <span class="promo-food-art" aria-hidden="true">🧆</span>
+          </article>
+
+          <!-- Card 3 — Orange -->
+          <article class="promo-card pc-orange" role="article" tabindex="0" aria-label="Try new: Spicy Tandoori Platter up to 10% off">
+            <div class="promo-left">
+              <span class="promo-tag">✨ Try New</span>
+              <h3 class="promo-title">Try Our Spicy Tandoori Platter</h3>
+              <p class="promo-price">Up to 10% off</p>
+              <a href="#food-grid" class="promo-cta">Order Now →</a>
+            </div>
+            <span class="promo-food-art" aria-hidden="true">🍗</span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         2.3 TODAY'S BEST DISHES
+    ============================================= -->
+    <section class="section section-alt" id="food-grid" aria-label="Today's best dishes">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Today's Best Dishes For You!</h2>
+          <a href="#" class="section-link">See All Products →</a>
+        </div>
+
+        <!-- Cuisine Filter Tabs -->
+        <div class="tab-bar" role="tablist" aria-label="Filter by cuisine type">
+          <button class="tab-pill active" data-tab="all" role="tab" aria-selected="true">Indian Cuisine</button>
+          <button class="tab-pill" data-tab="chinese" role="tab" aria-selected="false">Chinese Cuisine</button>
+          <button class="tab-pill" data-tab="south" role="tab" aria-selected="false">South Indian</button>
+          <button class="tab-pill" data-tab="street" role="tab" aria-selected="false">Street Food</button>
+          <button class="tab-pill" data-tab="beverages" role="tab" aria-selected="false">Beverages</button>
+          <button class="tab-pill" data-tab="desserts" role="tab" aria-selected="false">Desserts</button>
+        </div>
+
+        <!-- Food Cards Grid -->
+        <div class="food-grid" role="list" aria-label="Food items" id="food-cards-grid">
+
+          <!-- 1: Chicken Biryani -->
+          <article class="food-card" role="listitem" data-cuisine="all" data-name="Chicken Biryani">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-1" aria-hidden="true">🍛</div>
+              <span class="off-badge" aria-label="20 percent off">20% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Chicken Biryani to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-nonveg" aria-hidden="true"></span> Non-Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.8">⭐ 4.8</div>
+              </div>
+              <h3 class="food-name">Chicken Biryani</h3>
+              <div class="price-row">
+                <span class="price-old" aria-label="Original price">₹299</span>
+                <span class="price-new" aria-label="Discounted price">₹239</span>
+              </div>
+              <button class="add-cart-btn" data-item="Chicken Biryani" data-price="239" aria-label="Add Chicken Biryani to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 2: Paneer Butter Masala -->
+          <article class="food-card" role="listitem" data-cuisine="all" data-name="Paneer Butter Masala">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-2" aria-hidden="true">🧆</div>
+              <span class="off-badge" aria-label="20 percent off">20% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Paneer Butter Masala to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.7">⭐ 4.7</div>
+              </div>
+              <h3 class="food-name">Paneer Butter Masala</h3>
+              <div class="price-row">
+                <span class="price-old">₹249</span>
+                <span class="price-new">₹199</span>
+              </div>
+              <button class="add-cart-btn" data-item="Paneer Butter Masala" data-price="199" aria-label="Add Paneer Butter Masala to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 3: Aloo Paratha -->
+          <article class="food-card" role="listitem" data-cuisine="all" data-name="Aloo Paratha">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-3" aria-hidden="true">🫓</div>
+              <span class="off-badge" aria-label="15 percent off">15% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Aloo Paratha to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.6">⭐ 4.6</div>
+              </div>
+              <h3 class="food-name">Aloo Paratha with Butter</h3>
+              <div class="price-row">
+                <span class="price-old">₹129</span>
+                <span class="price-new">₹99</span>
+              </div>
+              <button class="add-cart-btn" data-item="Aloo Paratha" data-price="99" aria-label="Add Aloo Paratha to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 4: Momos -->
+          <article class="food-card" role="listitem" data-cuisine="chinese" data-name="Veg Momos">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-4" aria-hidden="true">🥟</div>
+              <span class="off-badge" aria-label="20 percent off">20% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Veg Momos to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.5">⭐ 4.5</div>
+              </div>
+              <h3 class="food-name">Steamed Veg Momos (8 pcs)</h3>
+              <div class="price-row">
+                <span class="price-old">₹159</span>
+                <span class="price-new">₹129</span>
+              </div>
+              <button class="add-cart-btn" data-item="Veg Momos" data-price="129" aria-label="Add Veg Momos to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 5: Veg Fried Rice -->
+          <article class="food-card" role="listitem" data-cuisine="chinese" data-name="Veg Fried Rice">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-5" aria-hidden="true">🍚</div>
+              <span class="off-badge" aria-label="15 percent off">15% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Veg Fried Rice to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.4">⭐ 4.4</div>
+              </div>
+              <h3 class="food-name">Veg Fried Rice</h3>
+              <div class="price-row">
+                <span class="price-old">₹179</span>
+                <span class="price-new">₹149</span>
+              </div>
+              <button class="add-cart-btn" data-item="Veg Fried Rice" data-price="149" aria-label="Add Veg Fried Rice to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 6: Dal Makhani -->
+          <article class="food-card" role="listitem" data-cuisine="all" data-name="Dal Makhani">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-6" aria-hidden="true">🫕</div>
+              <span class="off-badge" aria-label="18 percent off">18% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Dal Makhani to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.9">⭐ 4.9</div>
+              </div>
+              <h3 class="food-name">Dal Makhani</h3>
+              <div class="price-row">
+                <span class="price-old">₹219</span>
+                <span class="price-new">₹179</span>
+              </div>
+              <button class="add-cart-btn" data-item="Dal Makhani" data-price="179" aria-label="Add Dal Makhani to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 7: Masala Dosa -->
+          <article class="food-card" role="listitem" data-cuisine="south" data-name="Masala Dosa">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-7" aria-hidden="true">🌮</div>
+              <span class="off-badge" aria-label="20 percent off">20% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Masala Dosa to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.7">⭐ 4.7</div>
+              </div>
+              <h3 class="food-name">Crispy Masala Dosa</h3>
+              <div class="price-row">
+                <span class="price-old">₹149</span>
+                <span class="price-new">₹119</span>
+              </div>
+              <button class="add-cart-btn" data-item="Masala Dosa" data-price="119" aria-label="Add Masala Dosa to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+          <!-- 8: Gulab Jamun -->
+          <article class="food-card" role="listitem" data-cuisine="desserts" data-name="Gulab Jamun">
+            <div class="food-card-img">
+              <div class="food-img-placeholder gi-8" aria-hidden="true">🍮</div>
+              <span class="off-badge" aria-label="20 percent off">20% OFF</span>
+              <button class="wishlist-btn" aria-label="Add Gulab Jamun to wishlist" data-liked="false">♡</button>
+            </div>
+            <div class="food-card-body">
+              <div class="food-meta">
+                <div class="veg-tag">
+                  <span class="veg-dot dot-veg" aria-hidden="true"></span> Veg
+                </div>
+                <div class="star-row" aria-label="Rating 4.8">⭐ 4.8</div>
+              </div>
+              <h3 class="food-name">Gulab Jamun (4 pcs)</h3>
+              <div class="price-row">
+                <span class="price-old">₹99</span>
+                <span class="price-new">₹79</span>
+              </div>
+              <button class="add-cart-btn" data-item="Gulab Jamun" data-price="79" aria-label="Add Gulab Jamun to cart">+ Add to Cart</button>
+            </div>
+          </article>
+
+        </div><!-- /food-grid -->
+      </div>
+    </section>
+
+    <!-- =============================================
+         2.4 CUSTOMER REVIEWS
+    ============================================= -->
+    <section class="section" id="reviews" aria-label="Customer reviews and ratings">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="reviews-meta">
+              <div class="stars-display" aria-label="Average rating 5 stars" role="img">
+                <span aria-hidden="true">⭐</span><span aria-hidden="true">⭐</span>
+                <span aria-hidden="true">⭐</span><span aria-hidden="true">⭐</span>
+                <span aria-hidden="true">⭐</span>
+              </div>
+              <span class="reviews-count">480+ Reviews</span>
+            </div>
+          </div>
+          <a href="#" class="section-link">Next →</a>
+        </div>
+
+        <div class="reviews-row" role="list" aria-label="Customer review cards">
+
+          <article class="review-card" role="listitem">
+            <p class="review-title">Order was piping hot and on time!</p>
+            <p class="review-text">"Ordered Biryani and paneer at 1 PM, delivery arrived exactly at 1:38 PM. The food was packed well and tasted absolutely fresh. Will definitely order again from Kanak FoodCoat!"</p>
+            <div class="review-footer">
+              <div class="review-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+              <span class="review-name">— Priya S., Kanpur</span>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem">
+            <p class="review-title">Best biryani I've had delivered!</p>
+            <p class="review-text">"XYZ Restaurant's Chicken Biryani via Kanak FoodCoat is just insane. No compromise on quality even during rush hours. The app is super intuitive and OTP login was quick!"</p>
+            <div class="review-footer">
+              <div class="review-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+              <span class="review-name">— Rahul M., Lucknow</span>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem">
+            <p class="review-title">Super easy ordering experience!</p>
+            <p class="review-text">"First time using this app and I was impressed. Loved the local kitchen feel — everything felt authentic. The Dal Makhani was better than what I've had in restaurants. Highly recommended."</p>
+            <div class="review-footer">
+              <div class="review-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+              <span class="review-name">— Ananya K., Kanpur</span>
+            </div>
+          </article>
+
+          <article class="review-card" role="listitem">
+            <p class="review-title">Excellent service, every single time.</p>
+            <p class="review-text">"I've been ordering from Kanak FoodCoat for 3 months straight. Never once was I disappointed. The real-time tracking works perfectly and the delivery partners are always courteous."</p>
+            <div class="review-footer">
+              <div class="review-stars" aria-label="4 and a half stars">⭐⭐⭐⭐⭐</div>
+              <span class="review-name">— Vikram T., Lucknow</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         2.5 DUAL PROMO BANNERS
+    ============================================= -->
+    <section class="section section-alt" id="dual-promos" aria-label="Special promotional offers">
+      <div class="container">
+        <div class="dual-promo-grid">
+
+          <!-- Banner 1: Free Delivery -->
+          <article class="dual-banner db-mint" role="article" tabindex="0" aria-label="Enjoy free delivery within 2 hours">
+            <div>
+              <div class="db-badge" aria-hidden="true">🛵 Delivery</div>
+              <h3>Enjoy Free Delivery Within 2 Hours</h3>
+              <a href="#" class="dual-cta">Order Now →</a>
+            </div>
+            <span class="banner-art" aria-hidden="true">🛵</span>
+          </article>
+
+          <!-- Banner 2: UPI Offer -->
+          <article class="dual-banner db-yellow" role="article" tabindex="0" aria-label="Get 5% extra off on UPI payments">
+            <div>
+              <div class="db-badge" aria-hidden="true">💳 UPI Offer</div>
+              <h3>Get 5% Extra Off on UPI Payments</h3>
+              <a href="#" class="dual-cta">Order Now →</a>
+            </div>
+            <span class="banner-art" aria-hidden="true">💳</span>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =============================================
+         2.6 SUPPORT BAR
+    ============================================= -->
+    <div class="support-bar" role="complementary" aria-label="Customer support contact">
+      <div class="container">
+        <div class="support-inner">
+          <div class="support-text">
+            <h4>Need help with your order or delivery issue?</h4>
+            <p>Our support team is available 24 hours, 7 days a week</p>
+          </div>
+          <button class="support-phone-btn" aria-label="Call support at +91 98765 43210">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            +91 98765 43210
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =============================================
+         2.7 FOOTER
+    ============================================= -->
+    <footer class="footer" id="footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-grid">
+
+          <!-- Left Block -->
+          <div>
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:2px;">
+              <svg width="36" height="36" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="42" height="42" rx="10" fill="#FC8019"/>
+                <rect x="8"  y="17" width="26" height="3.5" rx="1.75" fill="white"/>
+                <rect x="6"  y="22" width="30" height="2.5" rx="1.25" fill="white" opacity="0.85"/>
+                <rect x="10" y="13" width="22" height="5"   rx="2.5"  fill="white" opacity="0.9"/>
+                <rect x="8"  y="25" width="26" height="9"   rx="4"    fill="white"/>
+                <circle cx="14" cy="29.5" r="2" fill="#FC8019"/>
+                <circle cx="28" cy="29.5" r="2" fill="#FC8019"/>
+              </svg>
+              <span style="font-size:22px;">
+                <span class="footer-brand-kanak">Kanak</span><span class="footer-brand-foodcoat">FoodCoat</span>
+              </span>
+            </div>
+            <p class="footer-tagline">
+              "Aapke sheher ka apna khaana app!" <br/>
+              <span style="font-size:13px; font-style:normal; color:#6B7280;">(Your city's very own food app)</span>
+            </p>
+            <div class="footer-app-btns">
+              <button class="footer-app-btn" aria-label="Get Kanak FoodCoat on Google Play">
+                <span class="fai" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l15 8.5-15 8.5c-.5.33-1.5.33-1.5-.5z" fill="#4CAF50"/>
+                    <path d="M3.5 3.5l10.1 10.1L18 9.5 3.5 3.5z" fill="#8BC34A"/>
+                    <path d="M3.5 20.5l10.1-10.1L18 14.5 3.5 20.5z" fill="#F44336"/>
+                  </svg>
+                </span>
+                <div class="fat-wrap">
+                  <span class="fat-small">Get it on</span>
+                  <span class="fat-name">Google Play</span>
+                </div>
+              </button>
+              <button class="footer-app-btn" aria-label="Download Kanak FoodCoat on App Store">
+                <span class="fai" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                </span>
+                <div class="fat-wrap">
+                  <span class="fat-small">Download on the</span>
+                  <span class="fat-name">App Store</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Block — Links -->
+          <div class="footer-links-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Terms &amp; Conditions</a></li>
+              <li><a href="#">Live Chat Support</a></li>
+              <li><a href="#">Refund &amp; Cancellation Policy</a></li>
+              <li><a href="#">Shipping &amp; Delivery Policy</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-social" aria-label="Social media links">
+            <a href="#" class="social-icon" aria-label="Follow us on Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Follow us on Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Follow us on Twitter / X">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+              </svg>
+            </a>
+          </div>
+          <p class="footer-copy">© 2025 <span style="color:#FC8019; font-weight:600;">Kanak</span><span style="color:#9CA3AF;">FoodCoat</span>. All rights reserved.</p>
+        </div>
+
+      </div>
+    </footer>
+
+  </main><!-- /page-content -->
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script>
+    /* ─── Navbar scroll shadow ─── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 12);
+    }, { passive: true });
+
+    /* ─── Hamburger / Mobile Drawer ─── */
+    const hamburger  = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-drawer');
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', (e) => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    /* ─── Cart State ─── */
+    let cartCount = 0;
+    let cartTotal = 0;
+    const cartBadge = document.getElementById('cart-badge');
+    const cartBtn   = document.getElementById('cart-btn');
+
+    function updateCart(itemName, price) {
+      cartCount++;
+      cartTotal += price;
+      cartBadge.textContent = cartCount;
+      cartBadge.classList.add('visible');
+      cartBtn.setAttribute('aria-label', `View cart (${cartCount} item${cartCount > 1 ? 's' : ''})`);
+    }
+
+    /* ─── Toast ─── */
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    /* ─── Add to Cart buttons ─── */
+    document.querySelectorAll('.add-cart-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const item  = this.dataset.item;
+        const price = parseInt(this.dataset.price, 10);
+        updateCart(item, price);
+        this.textContent = '✓ Added!';
+        this.classList.add('added');
+        showToast(`🛒 ${item} added to cart — ₹${price}`);
+        setTimeout(() => {
+          this.textContent = '+ Add to Cart';
+          this.classList.remove('added');
+        }, 1800);
+      });
+    });
+
+    /* ─── Cart button click ─── */
+    cartBtn.addEventListener('click', () => {
+      if (cartCount === 0) {
+        showToast('🛒 Your cart is empty. Add some delicious food!');
+      } else {
+        showToast(`🛒 ${cartCount} item${cartCount > 1 ? 's' : ''} in cart — Total: ₹${cartTotal}`);
+      }
+    });
+
+    /* ─── Wishlist buttons ─── */
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const liked = this.dataset.liked === 'true';
+        this.dataset.liked = String(!liked);
+        this.textContent = !liked ? '♥' : '♡';
+        this.classList.toggle('liked', !liked);
+        this.setAttribute('aria-pressed', String(!liked));
+        showToast(!liked ? '❤️ Added to wishlist!' : '💔 Removed from wishlist');
+      });
+    });
+
+    /* ─── Cuisine Tab Filter ─── */
+    const tabPills = document.querySelectorAll('.tab-pill');
+    const foodCards = document.querySelectorAll('#food-cards-grid .food-card');
+    const tabMap = {
+      all:       ['all', 'chinese', 'south', 'street', 'desserts'],
+      chinese:   ['chinese'],
+      south:     ['south'],
+      street:    ['street', 'all'],
+      beverages: ['beverages'],
+      desserts:  ['desserts']
+    };
+
+    tabPills.forEach(pill => {
+      pill.addEventListener('click', function () {
+        tabPills.forEach(p => { p.classList.remove('active'); p.setAttribute('aria-selected', 'false'); });
+        this.classList.add('active');
+        this.setAttribute('aria-selected', 'true');
+        const tab = this.dataset.tab;
+        const allowed = tabMap[tab] || ['all'];
+        foodCards.forEach(card => {
+          const cuisine = card.dataset.cuisine;
+          const show = tab === 'all' || allowed.includes(cuisine);
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+
+    /* ─── Category filter (decorative for now — sync with tabs) ─── */
+    document.querySelectorAll('.cat-item').forEach(item => {
+      item.addEventListener('click', function () {
+        document.querySelectorAll('.cat-item').forEach(c => {
+          c.classList.remove('active');
+          c.setAttribute('aria-pressed', 'false');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-pressed', 'true');
+        // Scroll food section into view
+        document.getElementById('food-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+</html>

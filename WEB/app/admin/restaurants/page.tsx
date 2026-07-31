@@ -1,0 +1,6 @@
+"use client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, Card, CardBody } from "@/components/ui/index";
+import { AdminShell } from "@/components/admin/admin-shell";
+import { supabase } from "@/lib/supabase";
+export default function AdminRestaurantsPage() { const client = useQueryClient(); const q = useQuery({ queryKey: ["admin-restaurants"], queryFn: async () => { const { data, error } = await supabase.from("restaurants").select("*").order("created_at", { ascending: false }); if (error) throw error; return data as { id: string; name: string; address: string; is_approved: boolean }[]; } }); return <AdminShell><Card><CardBody className="divide-y divide-stone-100 p-0">{q.data?.map((restaurant) => <div key={restaurant.id} className="flex flex-wrap items-center justify-between gap-3 p-5"><div><p className="font-bold text-stone-900">{restaurant.name}</p><p className="text-sm text-stone-500">{restaurant.address}</p></div><Button size="sm" variant={restaurant.is_approved ? "secondary" : "primary"} onClick={async () => { await supabase.from("restaurants").update({ is_approved: !restaurant.is_approved }).eq("id", restaurant.id); client.invalidateQueries({ queryKey: ["admin-restaurants"] }); }}>{restaurant.is_approved ? "Revoke approval" : "Approve"}</Button></div>)}</CardBody></Card></AdminShell>; }

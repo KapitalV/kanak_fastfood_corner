@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanak FoodCoat — Hot, Fresh Indian Food in 40 Minutes</title>
+  <meta name="description" content="Order hot, fresh Indian food from local restaurants within 20 km. Kanak FoodCoat delivers biryani, paneer, momos and more to your doorstep in 40 minutes or less." />
+  <meta name="keywords" content="Indian food delivery, biryani, paneer, momos, Kanak FoodCoat, local restaurant, 40 minutes delivery" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       CSS VARIABLES / DESIGN TOKENS
+    ============================================= */
+    :root {
+      --orange:        #FC8019;
+      --orange-dark:   #E8720A;
+      --orange-light:  #FFF3E6;
+      --green:         #16A34A;
+      --green-light:   #DCFCE7;
+      --success:       #22C55E;
+      --warning:       #F59E0B;
+      --error:         #EF4444;
+      --bg:            #FFFFFF;
+      --surface:       #F8FAFC;
+      --text-primary:  #111827;
+      --text-secondary:#6B7280;
+      --text-muted:    #9CA3AF;
+      --border:        #E5E7EB;
+      --shadow-sm:     0 1px 4px rgba(0,0,0,0.06);
+      --shadow-md:     0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg:     0 8px 32px rgba(0,0,0,0.13);
+      --transition:    all 0.2s ease;
+      --radius-sm:     8px;
+      --radius-md:     16px;
+      --radius-lg:     24px;
+      --radius-full:   9999px;
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+    ul { list-style: none; }
+
+    /* =============================================
+       UTILITIES
+    ============================================= */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* =============================================
+       BRAND WORDMARK
+    ============================================= */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+    }
+    .brand-text {
+      font-size: 21px;
+      letter-spacing: -0.3px;
+      line-height: 1;
+    }
+    .brand-kanak    { font-weight: 800; color: #FC8019; }
+    .brand-foodcoat { font-weight: 400; color: #16A34A; }
+
+    /* =============================================
+       STICKY NAVBAR
+    ============================================= */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--bg);
+      height: 66px;
+      display: flex;
+      align-items: center;
+      transition: box-shadow 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .navbar.scrolled {
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border-bottom-color: var(--border);
+    }
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .nav-links a {
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      transition: var(--transition);
+      position: relative;
+      padding-bottom: 3px;
+      white-space: nowrap;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--orange); }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 2px;
+      background: var(--orange);
+      border-radius: 2px;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      background: var(--orange);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-full);
+      transition: var(--transition);
+      white-space: nowrap;
+      letter-spacing: 0.1px;
+    }
+    .nav-cta:hover {
+      background: var(--orange-dark);
+      transform: scale(1.03);
+      box-shadow: 0 4px 14px rgba(252,128,25,0.38);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+    }
+    .hamburger span {
+      display: block;
+      width: 23px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: translateX(-8px); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 66px; left: 0; right: 0;
+      background: white;
+      z-index: 998;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+      padding: 8px 28px 24px;
+      border-top: 1px solid var(--border);
+      animation: slideDown 0.2s ease;
+    }
+    .mobile-drawer.open { display: block; }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .mobile-drawer ul li a {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: #374151;
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .mobile-drawer ul li a:hover { color: var(--orange); padding-left: 6px; }
+    .mobile-drawer ul li:last-child a { border-bottom: none; }
+    .mobile-drawer-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 16px;
+      background: var(--orange);
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px;
+      border-radius: var(--radius-full);
+      transition: var(--transition);
+    }
+    .mobile-drawer-cta:hover { background: var(--orange-dark); }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    .hero {
+      min-height: 580px;
+      background: var(--surface);
+      padding: 104px 0 64px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(252,128,25,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 58% 42%;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* Hero Left */
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      min-width: 0;
+    }
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--green-light);
+      color: var(--green);
+      border-radius: var(--radius-full);
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      width: fit-content;
+      letter-spacing: 0.1px;
+    }
+    .eyebrow-dot {
+      width: 8px; height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .hero-headline {
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.12;
+      letter-spacing: -1.5px;
+    }
+    .hero-headline .hl { color: var(--orange); }
+    .hero-subtext {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.72;
+      max-width: 490px;
+    }
+
+    /* Address Search */
+    .search-wrap {
+      max-width: 560px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 6px 6px 6px 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      transition: var(--transition);
+    }
+    .search-box:focus-within {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(252,128,25,0.14), 0 4px 18px rgba(0,0,0,0.08);
+    }
+    .search-pin { color: var(--orange); flex-shrink: 0; display: flex; }
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--text-primary);
+      background: transparent;
+      min-height: 46px;
+      min-width: 0;
+    }
+    .search-input::placeholder { color: var(--text-secondary); }
+    .search-btn {
+      background: var(--orange);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      padding: 13px 22px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      min-height: 46px;
+      transition: var(--transition);
+      letter-spacing: 0.1px;
+    }
+    .search-btn:hover {
+      background: var(--orange-dark);
+      transform: scale(1.02);
+      box-shadow: 0 4px 14px rgba(252,128,25,0.38);
+    }
+    .search-btn:active { transform: scale(0.98); }
+
+    /* Trust Row */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .trust-check {
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    /* App Strip */
+    .app-strip { display: flex; flex-direction: column; gap: 10px; }
+    .app-strip-label { font-size: 14px; font-weight: 500; color: #374151; }
+    .app-buttons { display: flex; gap: 11px; flex-wrap: wrap; }
+    .app-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #111827;
+      color: white;
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.22);
+    }
+    .app-btn:hover { background: #1F2937; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.28); }
+    .app-btn .app-icon { font-size: 22px; line-height: 1; }
+    .app-btn .app-label-wrap { display: flex; flex-direction: column; align-items: flex-start; }
+    .app-btn .app-small { font-size: 10px; font-weight: 400; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.6px; }
+    .app-btn .app-name  { font-size: 14px; font-weight: 700; line-height: 1.2; }
+
+    /* =============================================
+       HERO RIGHT — VISUAL
+    ============================================= */
+    .hero-right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 0;
+    }
+    .hero-visual-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+    }
+    .hero-visual {
+      width: 100%;
+      aspect-ratio: 1 / 0.9;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #FF9A3C 0%, #FC8019 55%, #E8720A 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(252,128,25,0.28);
+    }
+    .hero-visual::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; right: -60px;
+      width: 260px; height: 260px;
+      background: rgba(0,0,0,0.06);
+      border-radius: 50%;
+    }
+    .food-emoji-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .food-emoji-item {
+      background: rgba(255,255,255,0.18);
+      border-radius: var(--radius-md);
+      width: 88px; height: 88px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: var(--transition);
+    }
+    .food-emoji-item:hover { transform: scale(1.06); background: rgba(255,255,255,0.28); }
+    .food-emoji-item .fe { font-size: 38px; line-height: 1; }
+    .food-emoji-item .fe-label { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; }
+    .hero-visual-tagline {
+      color: rgba(255,255,255,0.9);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 16px;
+    }
+
+    /* Floating Chips */
+    .float-chip {
+      position: absolute;
+      background: white;
+      border-radius: var(--radius-full);
+      padding: 9px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      z-index: 5;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+    .chip-delivery { top: -14px; left: -24px; color: var(--green); }
+    .chip-rating   { top: -14px; right: -24px; color: var(--text-primary); }
+    .chip-star     { color: var(--warning); font-size: 14px; }
+
+    /* Deco floating food */
+    .deco {
+      position: absolute;
+      font-size: 44px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18));
+      pointer-events: none;
+      z-index: 4;
+    }
+    .deco-1 { bottom: -22px; left: -32px; }
+    .deco-2 { bottom: 20px;  right: -28px; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .deco-1 { animation: floatA 4s ease-in-out infinite; }
+      .deco-2 { animation: floatA 3.5s ease-in-out infinite 0.8s; }
+      .food-emoji-item:nth-child(1) { animation: floatB 3s ease-in-out infinite; }
+      .food-emoji-item:nth-child(2) { animation: floatB 3s ease-in-out infinite 0.4s; }
+      .food-emoji-item:nth-child(3) { animation: floatB 3s ease-in-out infinite 0.8s; }
+      .food-emoji-item:nth-child(4) { animation: floatB 3s ease-in-out infinite 1.2s; }
+    }
+    @keyframes floatA { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes floatB { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    /* =============================================
+       BENEFIT CARDS SECTION
+    ============================================= */
+    .benefits {
+      padding: 64px 0;
+      background: white;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .benefit-card {
+      border-radius: 20px;
+      padding: 30px 26px 50px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-yellow { background: #FEF9C3; }
+    .bc-teal   { background: #CFFAFE; }
+    .bc-pink   { background: #FCE7F3; }
+    .benefit-card-icon {
+      font-size: 38px;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .benefit-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 7px;
+      line-height: 1.3;
+    }
+    .benefit-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .benefit-arrow {
+      position: absolute;
+      bottom: 22px; right: 22px;
+      width: 38px; height: 38px;
+      background: var(--text-primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      transition: var(--transition);
+      line-height: 1;
+    }
+    .benefit-card:hover .benefit-arrow {
+      background: var(--orange);
+      transform: translateX(3px);
+    }
+
+    /* =============================================
+       RESPONSIVE — TABLET (768–1023px)
+    ============================================= */
+    @media (max-width: 1023px) {
+      .hero-grid {
+        grid-template-columns: 55% 45%;
+        gap: 28px;
+      }
+      .hero-headline { font-size: 36px; letter-spacing: -1px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 14px; }
+    }
+
+    /* =============================================
+       RESPONSIVE — MOBILE (<768px)
+    ============================================= */
+    @media (max-width: 767px) {
+      .container {
+        max-width: 100%;
+        padding: 0 20px;
+      }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        padding: 82px 0 48px;
+        min-height: auto;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        min-width: 0;
+      }
+      .hero-left  { order: 1; }
+      .hero-right { order: 2; }
+      .hero-left,
+      .hero-subtext,
+      .search-wrap,
+      .search-box,
+      .trust-row,
+      .app-strip {
+        width: 100%;
+        max-width: calc(100vw - 40px);
+      }
+      .hero-headline {
+        font-size: 28px;
+        letter-spacing: -0.4px;
+        overflow-wrap: anywhere;
+      }
+      .hero-headline .hl { display: block; }
+      .hero-subtext { font-size: 15px; }
+
+      .search-box {
+        flex-wrap: wrap;
+        border-radius: 18px;
+        padding: 12px;
+        gap: 8px;
+      }
+      .search-btn {
+        width: 100%;
+        border-radius: 14px;
+        text-align: center;
+        justify-content: center;
+      }
+      .search-input { min-height: 40px; }
+
+      .trust-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .hero-visual-wrap { max-width: min(100%, 320px); margin: 0 auto; }
+      .food-emoji-item { width: 70px; height: 70px; }
+      .food-emoji-item .fe { font-size: 28px; }
+
+      .chip-delivery { top: -12px; left: 6px; font-size: 10px; padding: 7px 10px; }
+      .chip-rating   { top: 30px; right: 6px; font-size: 10px; padding: 7px 10px; }
+      .deco-1        { left: -16px; font-size: 34px; }
+      .deco-2        { right: -16px; font-size: 34px; }
+
+      .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .benefit-card { padding: 26px 22px 48px; }
+    }
+
+    /* =============================================
+       FOCUS / ACCESSIBILITY
+    ============================================= */
+    :focus-visible {
+      outline: 2.5px solid var(--orange);
+      outline-offset: 3px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       STICKY NAVBAR
+  ============================================= -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <div class="navbar-inner">
+
+        <!-- Brand -->
+        <a href="index.html" class="brand" aria-label="Kanak FoodCoat — Go to homepage">
+          <svg class="brand-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+            <rect width="42" height="42" rx="10" fill="#FC8019"/>
+            <rect x="8"  y="17" width="26" height="3.5" rx="1.75" fill="white"/>
+            <rect x="6"  y="22" width="30" height="2.5" rx="1.25" fill="white" opacity="0.85"/>
+            <rect x="10" y="13" width="22" height="5"   rx="2.5"  fill="white" opacity="0.9"/>
+            <rect x="8"  y="25" width="26" height="9"   rx="4"    fill="white"/>
+            <circle cx="14" cy="29.5" r="2" fill="#FC8019"/>
+            <circle cx="28" cy="29.5" r="2" fill="#FC8019"/>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-kanak">Kanak</span><span class="brand-foodcoat">FoodCoat</span>
+          </div>
+        </a>
+
+        <!-- Desktop Nav -->
+        <ul class="nav-links" role="list">
+          <li><a href="index.html" class="active" aria-current="page">Home</a></li>
+          <li><a href="menu.html">Offers</a></li>
+          <li><a href="menu.html">Restaurants</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">Riders</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+
+        <!-- Right: CTA + Hamburger -->
+        <div class="nav-right">
+          <a href="menu.html" class="nav-cta" id="nav-order-btn" role="button">Order Now</a>
+          <button class="hamburger" id="hamburger-btn"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-drawer">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Offers</a></li>
+      <li><a href="menu.html">Restaurants</a></li>
+      <li><a href="#">Partners</a></li>
+      <li><a href="#">Riders</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <a href="menu.html" class="mobile-drawer-cta">Order Now</a>
+  </div>
+
+
+  <!-- =============================================
+       HERO SECTION
+  ============================================= -->
+  <main id="main-content">
+  <section class="hero" id="hero" aria-label="Hero — Order fresh Indian food">
+    <div class="container">
+      <div class="hero-grid">
+
+        <!-- ── LEFT COLUMN ── -->
+        <div class="hero-left">
+
+          <!-- Eyebrow Tag -->
+          <div class="eyebrow-tag" role="note" aria-label="Now delivering within 20 km radius">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            Now delivering in 20 km radius
+          </div>
+
+          <!-- H1 Headline -->
+          <h1 class="hero-headline">
+            Hot, Fresh Food In <span class="hl">40 Minutes</span> Or Less
+          </h1>
+
+          <!-- Subtext -->
+          <p class="hero-subtext">
+            Local restaurants delivered to your doorstep within a 20&nbsp;km radius.
+            Simple, safe, and trusted ordering for students, offices, families,
+            and first-time users.
+          </p>
+
+          <!-- Address Search -->
+          <div class="search-wrap" role="search" aria-label="Delivery address search">
+            <div class="search-box" id="search-box">
+              <span class="search-pin" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="#FC8019" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                class="search-input"
+                id="address-input"
+                placeholder="Enter your delivery address or area"
+                aria-label="Enter your delivery address or area"
+                autocomplete="street-address"
+              />
+              <button class="search-btn" id="find-food-btn" aria-label="Find food near me">
+                Find Food Near Me
+              </button>
+            </div>
+          </div>
+
+          <!-- Trust Microcopy -->
+          <div class="trust-row" role="list" aria-label="Why choose Kanak FoodCoat">
+            <div class="trust-item" role="listitem">
+              <span class="trust-check" aria-hidden="true">✓</span>
+              <span>Instant OTP Login</span>
+            </div>
+            <div class="trust-item" role="listitem">
+              <span class="trust-check" aria-hidden="true">✓</span>
+              <span>Secure UPI &amp; COD</span>
+            </div>
+            <div class="trust-item" role="listitem">
+              <span class="trust-check" aria-hidden="true">✓</span>
+              <span>Trusted Local Kitchens</span>
+            </div>
+          </div>
+
+          <!-- App Download Strip -->
+          <div class="app-strip">
+            <p class="app-strip-label">Order faster with the Kanak FoodCoat app.</p>
+            <div class="app-buttons">
+              <button class="app-btn" id="google-play-btn" aria-label="Get Kanak FoodCoat on Google Play">
+                <span class="app-icon" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 20.5v-17c0-.83 1-.83 1.5-.5l15 8.5-15 8.5c-.5.33-1.5.33-1.5-.5z" fill="#4CAF50"/>
+                    <path d="M3.5 3.5l10.1 10.1L18 9.5 3.5 3.5z" fill="#8BC34A"/>
+                    <path d="M3.5 20.5l10.1-10.1L18 14.5 3.5 20.5z" fill="#F44336"/>
+                    <path d="M3.5 3.5L13.6 13.6l4.9-4.1-14.99-6z" fill="#FFEB3B" opacity="0.7"/>
+                  </svg>
+                </span>
+                <div class="app-label-wrap">
+                  <span class="app-small">Get it on</span>
+                  <span class="app-name">Google Play</span>
+                </div>
+              </button>
+              <button class="app-btn" id="app-store-btn" aria-label="Download Kanak FoodCoat on App Store">
+                <span class="app-icon" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                </span>
+                <div class="app-label-wrap">
+                  <span class="app-small">Download on the</span>
+                  <span class="app-name">App Store</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT COLUMN — VISUAL ── -->
+        <div class="hero-right">
+          <div class="hero-visual-wrap">
+
+            <!-- Floating Chips -->
+            <div class="float-chip chip-delivery" role="note" aria-label="20 km local delivery available">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              📍 20 km Local Delivery
+            </div>
+
+            <div class="float-chip chip-rating" role="note" aria-label="4.7 average customer rating">
+              <span class="chip-star" aria-hidden="true">⭐</span>
+              4.7 Average Rating
+            </div>
+
+            <!-- Main Visual -->
+            <div class="hero-visual" aria-hidden="true" role="presentation">
+              <div class="food-emoji-grid">
+                <div class="food-emoji-item">
+                  <span class="fe">🍛</span>
+                  <span class="fe-label">Biryani</span>
+                </div>
+                <div class="food-emoji-item">
+                  <span class="fe">🥟</span>
+                  <span class="fe-label">Momos</span>
+                </div>
+                <div class="food-emoji-item">
+                  <span class="fe">🧆</span>
+                  <span class="fe-label">Snacks</span>
+                </div>
+                <div class="food-emoji-item">
+                  <span class="fe">🍕</span>
+                  <span class="fe-label">Pizza</span>
+                </div>
+              </div>
+              <p class="hero-visual-tagline">🏪 1000+ Local Restaurants</p>
+            </div>
+
+            <!-- Decorative floating items -->
+            <span class="deco deco-1" aria-hidden="true">🍜</span>
+            <span class="deco deco-2" aria-hidden="true">🥗</span>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       BENEFIT CARDS
+  ============================================= -->
+  <section class="benefits" id="benefits" aria-label="Why order with Kanak FoodCoat">
+    <div class="container">
+      <div class="benefits-grid">
+
+        <!-- Card 1 -->
+        <article class="benefit-card bc-yellow" tabindex="0" role="article" aria-label="Exclusive Offers and Deals">
+          <span class="benefit-card-icon" aria-hidden="true">🏷️</span>
+          <h3>Exclusive Offers &amp; Deals</h3>
+          <p>Save more on every order with daily coupons, combo deals, and exciting cashback offers</p>
+          <div class="benefit-arrow" aria-hidden="true">→</div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="benefit-card bc-teal" tabindex="0" role="article" aria-label="Fresh, Hygienic Kitchens">
+          <span class="benefit-card-icon" aria-hidden="true">🥘</span>
+          <h3>Fresh, Hygienic Kitchens</h3>
+          <p>Prepared fresh by verified local restaurants — FSSAI certified, quality-checked every day</p>
+          <div class="benefit-arrow" aria-hidden="true">→</div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="benefit-card bc-pink" tabindex="0" role="article" aria-label="40-Minute Delivery Guaranteed">
+          <span class="benefit-card-icon" aria-hidden="true">🛵</span>
+          <h3>40-Min Guaranteed</h3>
+          <p>On-time every time. Real-time tracking from kitchen to doorstep, with live order updates</p>
+          <div class="benefit-arrow" aria-hidden="true">→</div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- =============================================
+       JAVASCRIPT
+  ============================================= -->
+  <script>
+    // --- Navbar scroll shadow ---
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 12);
+    }, { passive: true });
+
+    // --- Hamburger / Mobile Drawer ---
+    const hamburger = document.getElementById('hamburger-btn');
+    const drawer    = document.getElementById('mobile-drawer');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = drawer.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!hamburger.contains(e.target) && !drawer.contains(e.target)) {
+        drawer.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Open navigation menu');
+      }
+    });
+
+    // --- Find Food → Navigate to menu.html ---
+    document.getElementById('find-food-btn').addEventListener('click', () => {
+      window.location.href = 'menu.html';
+    });
+
+    document.getElementById('address-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') window.location.href = 'menu.html';
+    });
+
+    // --- Nav Order Now ---
+    document.getElementById('nav-order-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'menu.html';
+    });
+  </script>
+
+</body>
+</html>

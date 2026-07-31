@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".pricing-tests",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2022",
+    "isolatedModules": false,
+    "incremental": false
+  },
+  "include": [
+    "services/pricing.service.ts",
+    "services/pricing.service.test.ts",
+    "repositories/pricing.repo.ts"
+  ]
+}
