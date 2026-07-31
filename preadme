@@ -1,0 +1,135 @@
+# Kanak Fastfood Corner & Kanak FoodCoat Project Readme
+
+Welcome to the **Kanak Fastfood Corner / Kanak Foods** repository. This workspace contains a dual-architecture implementation of a high-performance, responsive food delivery platform tailored for authentic Indian cuisine.
+
+The workspace consists of two distinct sub-projects:
+1. **`WEB/`**: A full-stack Next.js 16 food ordering Progressive Web App (PWA) powered by TypeScript, Tailwind CSS v4, Supabase, TanStack Query, and Razorpay.
+2. **`WEBSTORE/`**: A highly interactive, zero-dependency static webstore built with pure HTML5, CSS3, and vanilla JavaScript.
+
+---
+
+## 📂 Repository Structure
+
+```
+.
+├── WEB/                       # Next.js 16 full-stack PWA
+│   ├── app/                   # Next.js App Router (Auth, Customer, Store, Delivery, Admin)
+│   ├── components/            # Design system (UI, layout, and shared features)
+│   ├── constants/             # App-wide rules, fees, and roles
+│   ├── features/              # Feature-scoped React components and logic
+│   ├── hooks/                 # Custom React hooks (auth, toast, realtime, etc.)
+│   ├── lib/                   # Supabase client/server initializers and payment adapters
+│   ├── public/                # Static assets and PWA manifest
+│   ├── repositories/          # Pure Supabase query abstractions (Data Access Layer)
+│   ├── scripts/               # Build/maintenance helper scripts
+│   ├── services/              # Business rules, totals, and authorization checks
+│   ├── supabase/              # Database schema migrations, policies, and seeds
+│   ├── tests/                 # Integration and pricing domain test suites
+│   └── types/                 # Shared domain, database, and API TypeScript definitions
+│
+├── WEBSTORE/                  # Vanilla HTML5/CSS3/JS Webstore
+│   ├── index.html             # Multi-column landing page with interactive address locator
+│   ├── menu.html              # Interactive food catalog, dietary filters, and sliding cart drawer
+│   └── README.md              # Webstore-specific documentation
+│
+├── CLAUDE.md                  # Developer guidelines and architectural hard rules
+├── package.json               # Root dependencies configuration
+└── preadme                    # This workspace-wide readme file
+```
+
+---
+
+## ⚡ Quick Start
+
+### 1. Running the Full-Stack App (`WEB/`)
+
+The full-stack application relies on Supabase for data and authentication and Razorpay for payment processing.
+
+#### Setup & Dependency Installation:
+```bash
+cd WEB
+npm install
+cp .env.example .env.local
+```
+
+#### Local Environment Variables:
+Fill out `.env.local` with your Supabase keys and app configurations. Ensure server-only keys do not have a `NEXT_PUBLIC_` prefix:
+* `NEXT_PUBLIC_SUPABASE_URL`
+* `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+* `SUPABASE_SERVICE_ROLE_KEY`
+* `NEXT_PUBLIC_APP_URL`
+* `RAZORPAY_KEY_ID`
+* `RAZORPAY_KEY_SECRET`
+* `RAZORPAY_WEBHOOK_SECRET`
+
+#### Supabase Migration Sequence:
+1. Apply the baseline schema from `supabase/schema.sql` to your project database.
+2. Apply migrations in `supabase/migrations/001_hardening.sql` through `010_order_state_machine.sql` in numeric sequence.
+3. Install storage policies from `supabase/storage-policies.sql`. Ensure you create public buckets: `avatars`, `reviews`, `restaurants`, and `banners`.
+4. Seed mock data using `supabase/seed.sql` after updating Auth User IDs.
+
+#### Start the Next.js Dev Server:
+```bash
+npm run dev
+```
+
+---
+
+### 2. Running the Static Webstore (`WEBSTORE/`)
+
+The vanilla webstore operates as a standalone prototype requiring no bundlers, compilation, or packages.
+
+#### Serve Locally with python:
+```bash
+cd WEBSTORE
+python -m http.server 5555
+```
+
+#### Serve Locally with npx:
+```bash
+cd WEBSTORE
+npx http-server -p 5555
+```
+
+Visit the app in your browser at:
+* **Landing Page**: `http://localhost:5555/index.html`
+* **Menu Page**: `http://localhost:5555/menu.html`
+
+---
+
+## 🛡️ Architectural & Security Hard Rules
+
+As detailed in `CLAUDE.md`, this codebase adheres to a strict set of design and architectural boundaries. Every developer and agent must obey these guidelines:
+
+1. **Server-Side Validation**: The server is the absolute source of truth for calculations (money, totals, taxes, delivery fees). Never trust a pricing total supplied by the client.
+2. **Key Security**: Critical secrets like `RAZORPAY_KEY_SECRET` and `SUPABASE_SERVICE_ROLE_KEY` must never be exposed with a `NEXT_PUBLIC_` prefix.
+3. **Database Migrations**: Database schemas must only be modified via new, numbered files under `supabase/migrations/`. Applied migrations must never be edited.
+4. **Authenticity & Role Verification**: Every single mutation must be authenticated on the server side and authorized using resources ownership logic. Browser-supplied user roles are never trusted.
+5. **No Direct Restructuring**: Extend existing patterns in `repositories/`, `services/`, and `app/`. Do not reorganize or rebuild working features.
+
+---
+
+## 🧪 Project Verification & Testing
+
+Verify code quality, buildability, and regression safety using the following suite of commands:
+
+```bash
+cd WEB
+
+# Run unit and PWA manifest validation tests
+npm test
+
+# Run strict cart and coupon pricing engine tests
+npm run test:pricing
+
+# Run TypeScript static analysis
+npx tsc --noEmit
+
+# Run code linter
+npm run lint
+
+# Compile and build the Next.js site
+npm run build
+```
+
+*Note: Integration tests (via `npm run test:integration`) require local staging configuration with `INTEGRATION_*` environment variables loaded, and should never run against a production instance.*
